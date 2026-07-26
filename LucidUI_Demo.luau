@@ -1,34 +1,30 @@
-local LucidUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/LucidUI.luau"))() 
-    or loadstring(readfile("LucidUI.luau"))()
+local LucidUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/LucidUI.luau?v=" .. tick()))()
 
 local Window = LucidUI:CreateWindow({
     Title = "LucidUI",
-    SubTitle = "v2.5",
-    Size = UDim2.new(0, 540, 0, 360),
+    Size = UDim2.new(0, 480, 0, 310),
     ToggleKey = Enum.KeyCode.RightControl
 })
 
 local MainTab = Window:CreateTab("Main", "⚡")
 local SettingsTab = Window:CreateTab("Settings", "⚙️")
 
-local CombatSection = MainTab:CreateSection("Combat Utility")
+local MainSection = MainTab:CreateSection("Features")
 
-CombatSection:AddToggle({
-    Name = "Auto Farm Mobs",
+MainSection:AddToggle({
+    Name = "Auto Farm",
     Default = false,
-    Flag = "AutoFarm",
-    Callback = function(enabled)
-        LucidUI:Notify({Title = "Auto Farm", Text = enabled and "Enabled" or "Disabled", Type = enabled and "Success" or "Warning"})
+    Callback = function(state)
+        LucidUI:Notify({Title = "Auto Farm", Text = state and "ON" or "OFF"})
     end
 })
 
-CombatSection:AddSlider({
+MainSection:AddSlider({
     Name = "WalkSpeed",
     Min = 16,
-    Max = 200,
+    Max = 150,
     Default = 32,
     Suffix = " sps",
-    Flag = "WalkSpeed",
     Callback = function(val)
         if game.Players.LocalPlayer and game.Players.LocalPlayer.Character then
             local hum = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
@@ -37,38 +33,34 @@ CombatSection:AddSlider({
     end
 })
 
-CombatSection:AddDropdown({
-    Name = "Target Weapon",
-    Options = {"Sword", "Staff", "Bow", "Dagger"},
+MainSection:AddDropdown({
+    Name = "Weapon",
+    Options = {"Sword", "Staff", "Bow"},
     Default = "Sword",
-    Flag = "Weapon",
-    Callback = function(choice)
-        print("Equipped:", choice)
+    Callback = function(val)
+        print("Equipped:", val)
     end
 })
 
-local ConfigSection = SettingsTab:CreateSection("Appearance & Settings")
+local SettingsSection = SettingsTab:CreateSection("Themes & Utility")
 
-ConfigSection:AddDropdown({
-    Name = "Color Theme",
-    Options = {"Obsidian Dark", "Midnight Teal", "Nordic Slate", "Pure Light"},
-    Default = "Obsidian Dark",
+SettingsSection:AddDropdown({
+    Name = "Theme",
+    Options = {"Dark", "Midnight", "Light"},
+    Default = "Dark",
     Callback = function(theme)
         LucidUI:SetTheme(theme)
     end
 })
 
-ConfigSection:AddKeybind({
-    Name = "Toggle Interface Key",
-    Default = Enum.KeyCode.RightControl,
-    Callback = function(key)
-        print("Rebound toggle key to:", key.Name)
-    end
+SettingsSection:AddKeybind({
+    Name = "Toggle Key",
+    Default = Enum.KeyCode.RightControl
 })
 
-ConfigSection:AddButton({
-    Name = "Copy Script Loadstring",
+SettingsSection:AddButton({
+    Name = "Copy Script Link",
     Callback = function()
-        LucidUI:SetClipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/LucidUI_Demo.luau"))()')
+        LucidUI:SetClipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/LucidUI_Demo.luau?v=" .. tick()))()')
     end
 })
