@@ -1,7 +1,7 @@
 local LucidUI = {
-    Version = "2.5.0",
+    Version = "3.0.0",
     Themes = {},
-    CurrentTheme = "Obsidian Dark",
+    CurrentTheme = "Dark",
     ActiveWindows = {},
     ConfigFolder = "LucidUI_Configs"
 }
@@ -25,96 +25,58 @@ local function GetGuiParent()
             return CoreGui
         end
     end)
-    if success and result then
-        return result
-    end
+    if success and result then return result end
     if LocalPlayer and LocalPlayer:FindFirstChild("PlayerGui") then
         return LocalPlayer.PlayerGui
     end
-    error("LucidUI: Could not locate valid GUI container.")
+    error("LucidUI: Could not locate parent container.")
 end
 
 function LucidUI:SetClipboard(text)
-    if setclipboard then
-        setclipboard(tostring(text))
-        LucidUI:Notify({Title = "Copied", Text = "Copied to clipboard", Type = "Success", Duration = 2})
-    elseif toclipboard then
-        toclipboard(tostring(text))
-        LucidUI:Notify({Title = "Copied", Text = "Copied to clipboard", Type = "Success", Duration = 2})
-    end
+    if setclipboard then setclipboard(tostring(text))
+    elseif toclipboard then toclipboard(tostring(text)) end
 end
 
 LucidUI.Themes = {
-    ["Obsidian Dark"] = {
-        MainBG = Color3.fromRGB(18, 19, 24),
-        SidebarBG = Color3.fromRGB(14, 15, 19),
-        SectionBG = Color3.fromRGB(24, 26, 33),
-        ElementBG = Color3.fromRGB(31, 34, 43),
-        ElementHover = Color3.fromRGB(39, 43, 54),
+    ["Dark"] = {
+        MainBG = Color3.fromRGB(15, 16, 20),
+        SidebarBG = Color3.fromRGB(12, 13, 16),
+        SectionBG = Color3.fromRGB(20, 22, 28),
+        ElementBG = Color3.fromRGB(26, 28, 36),
+        ElementHover = Color3.fromRGB(34, 37, 48),
         Accent = Color3.fromRGB(99, 102, 241),
-        Text = Color3.fromRGB(243, 244, 246),
-        SubText = Color3.fromRGB(156, 163, 175),
-        Border = Color3.fromRGB(42, 45, 57),
-        Success = Color3.fromRGB(34, 197, 94),
-        Warning = Color3.fromRGB(234, 179, 8),
-        Error = Color3.fromRGB(239, 68, 68),
-        Info = Color3.fromRGB(59, 130, 246)
+        Text = Color3.fromRGB(240, 242, 245),
+        SubText = Color3.fromRGB(140, 145, 158),
+        Border = Color3.fromRGB(32, 35, 45)
     },
-    ["Midnight Teal"] = {
-        MainBG = Color3.fromRGB(13, 19, 24),
-        SidebarBG = Color3.fromRGB(9, 13, 17),
-        SectionBG = Color3.fromRGB(18, 26, 33),
-        ElementBG = Color3.fromRGB(25, 36, 46),
-        ElementHover = Color3.fromRGB(33, 47, 60),
-        Accent = Color3.fromRGB(20, 184, 166),
-        Text = Color3.fromRGB(240, 253, 250),
-        SubText = Color3.fromRGB(153, 246, 228),
-        Border = Color3.fromRGB(35, 50, 64),
-        Success = Color3.fromRGB(20, 184, 166),
-        Warning = Color3.fromRGB(245, 158, 11),
-        Error = Color3.fromRGB(244, 63, 94),
-        Info = Color3.fromRGB(56, 189, 248)
+    ["Midnight"] = {
+        MainBG = Color3.fromRGB(10, 12, 18),
+        SidebarBG = Color3.fromRGB(7, 8, 13),
+        SectionBG = Color3.fromRGB(15, 18, 26),
+        ElementBG = Color3.fromRGB(20, 25, 36),
+        ElementHover = Color3.fromRGB(28, 35, 50),
+        Accent = Color3.fromRGB(14, 165, 233),
+        Text = Color3.fromRGB(240, 245, 250),
+        SubText = Color3.fromRGB(130, 145, 165),
+        Border = Color3.fromRGB(28, 35, 50)
     },
-    ["Nordic Slate"] = {
-        MainBG = Color3.fromRGB(24, 27, 34),
-        SidebarBG = Color3.fromRGB(18, 20, 26),
-        SectionBG = Color3.fromRGB(32, 36, 45),
-        ElementBG = Color3.fromRGB(42, 47, 59),
-        ElementHover = Color3.fromRGB(52, 58, 73),
-        Accent = Color3.fromRGB(59, 130, 246),
-        Text = Color3.fromRGB(248, 250, 252),
-        SubText = Color3.fromRGB(148, 163, 184),
-        Border = Color3.fromRGB(55, 62, 78),
-        Success = Color3.fromRGB(34, 197, 94),
-        Warning = Color3.fromRGB(234, 179, 8),
-        Error = Color3.fromRGB(239, 68, 68),
-        Info = Color3.fromRGB(59, 130, 246)
-    },
-    ["Pure Light"] = {
-        MainBG = Color3.fromRGB(250, 250, 250),
-        SidebarBG = Color3.fromRGB(243, 244, 246),
+    ["Light"] = {
+        MainBG = Color3.fromRGB(248, 249, 251),
+        SidebarBG = Color3.fromRGB(240, 242, 245),
         SectionBG = Color3.fromRGB(255, 255, 255),
-        ElementBG = Color3.fromRGB(229, 231, 235),
-        ElementHover = Color3.fromRGB(209, 213, 219),
+        ElementBG = Color3.fromRGB(232, 235, 240),
+        ElementHover = Color3.fromRGB(215, 220, 228),
         Accent = Color3.fromRGB(37, 99, 235),
-        Text = Color3.fromRGB(17, 24, 39),
-        SubText = Color3.fromRGB(107, 114, 128),
-        Border = Color3.fromRGB(229, 231, 235),
-        Success = Color3.fromRGB(22, 163, 74),
-        Warning = Color3.fromRGB(202, 138, 4),
-        Error = Color3.fromRGB(220, 38, 38),
-        Info = Color3.fromRGB(37, 99, 235)
+        Text = Color3.fromRGB(20, 24, 33),
+        SubText = Color3.fromRGB(110, 118, 132),
+        Border = Color3.fromRGB(220, 225, 232)
     }
 }
 
 local ThemeRegistry = {}
 
 local function RegisterThemeColor(guiObject, propertyName, themeColorKey)
-    table.insert(ThemeRegistry, {
-        Object = guiObject,
-        Property = propertyName,
-        Key = themeColorKey
-    })
+    table.insert(ThemeRegistry, {Object = guiObject, Property = propertyName, Key = themeColorKey})
     local colors = LucidUI.Themes[LucidUI.CurrentTheme]
     if colors and colors[themeColorKey] then
         guiObject[propertyName] = colors[themeColorKey]
@@ -125,14 +87,11 @@ function LucidUI:SetTheme(themeName)
     if not LucidUI.Themes[themeName] then return end
     LucidUI.CurrentTheme = themeName
     local colors = LucidUI.Themes[themeName]
-    
     for i = #ThemeRegistry, 1, -1 do
         local reg = ThemeRegistry[i]
         if reg.Object and reg.Object.Parent then
             if colors[reg.Key] then
-                TweenService:Create(reg.Object, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    [reg.Property] = colors[reg.Key]
-                }):Play()
+                TweenService:Create(reg.Object, TweenInfo.new(0.15), {[reg.Property] = colors[reg.Key]}):Play()
             end
         else
             table.remove(ThemeRegistry, i)
@@ -148,14 +107,14 @@ end
 
 local function CreateUICorner(parent, radius)
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, radius or 8)
+    corner.CornerRadius = UDim.new(0, radius or 6)
     corner.Parent = parent
     return corner
 end
 
-local function CreateUIStroke(parent, colorKey, thickness)
+local function CreateUIStroke(parent, colorKey)
     local stroke = Instance.new("UIStroke")
-    stroke.Thickness = thickness or 1
+    stroke.Thickness = 1
     stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     stroke.Parent = parent
     RegisterThemeColor(stroke, "Color", colorKey or "Border")
@@ -164,68 +123,55 @@ end
 
 local function CreateUIPadding(parent, top, bottom, left, right)
     local padding = Instance.new("UIPadding")
-    padding.PaddingTop = UDim.new(0, top or 8)
-    padding.PaddingBottom = UDim.new(0, bottom or 8)
-    padding.PaddingLeft = UDim.new(0, left or 12)
-    padding.PaddingRight = UDim.new(0, right or 12)
+    padding.PaddingTop = UDim.new(0, top or 6)
+    padding.PaddingBottom = UDim.new(0, bottom or 6)
+    padding.PaddingLeft = UDim.new(0, left or 10)
+    padding.PaddingRight = UDim.new(0, right or 10)
     padding.Parent = parent
     return padding
-end
-
-function LucidUI:InitNotifications()
-    if LucidUI.NotificationsContainer then return end
-    local parentContainer = GetGuiParent()
-    local notifyGui = Instance.new("ScreenGui")
-    notifyGui.Name = "LucidUI_Notifications"
-    notifyGui.DisplayOrder = 9999
-    notifyGui.ResetOnSpawn = false
-    notifyGui.Parent = parentContainer
-
-    local container = Instance.new("Frame")
-    container.Size = UDim2.new(0, 260, 1, -20)
-    container.Position = UDim2.new(1, -270, 0, 10)
-    container.BackgroundTransparency = 1
-    container.Parent = notifyGui
-
-    local layout = Instance.new("UIListLayout")
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-    layout.Padding = UDim.new(0, 6)
-    layout.Parent = container
-
-    LucidUI.NotificationsContainer = container
 end
 
 function LucidUI:Notify(options)
     options = options or {}
     local title = options.Title or "Notice"
-    local message = options.Text or options.Content or ""
-    local duration = options.Duration or 3.5
-    local notifyType = options.Type or "Info"
+    local message = options.Text or ""
+    local duration = options.Duration or 3
 
-    LucidUI:InitNotifications()
+    if not LucidUI.NotificationsContainer then
+        local parentContainer = GetGuiParent()
+        local notifyGui = Instance.new("ScreenGui")
+        notifyGui.Name = "LucidUI_Notify"
+        notifyGui.ResetOnSpawn = false
+        notifyGui.Parent = parentContainer
 
-    local colors = LucidUI.Themes[LucidUI.CurrentTheme]
-    local typeColor = colors.Info
-    if notifyType == "Success" then typeColor = colors.Success
-    elseif notifyType == "Warning" then typeColor = colors.Warning
-    elseif notifyType == "Error" then typeColor = colors.Error end
+        local container = Instance.new("Frame")
+        container.Size = UDim2.new(0, 220, 1, -20)
+        container.Position = UDim2.new(1, -230, 0, 10)
+        container.BackgroundTransparency = 1
+        container.Parent = notifyGui
+
+        local layout = Instance.new("UIListLayout")
+        layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+        layout.Padding = UDim.new(0, 6)
+        layout.Parent = container
+
+        LucidUI.NotificationsContainer = container
+    end
 
     local notifFrame = Instance.new("Frame")
     notifFrame.Size = UDim2.new(1, 0, 0, 0)
     notifFrame.AutomaticSize = Enum.AutomaticSize.Y
-    notifFrame.ClipsDescendants = true
     notifFrame.Parent = LucidUI.NotificationsContainer
     RegisterThemeColor(notifFrame, "BackgroundColor3", "SectionBG")
-    CreateUICorner(notifFrame, 8)
-    CreateUIStroke(notifFrame, "Border", 1)
-    CreateUIPadding(notifFrame, 8, 10, 10, 10)
+    CreateUICorner(notifFrame, 6)
+    CreateUIStroke(notifFrame, "Border")
+    CreateUIPadding(notifFrame, 6, 8, 8, 8)
 
     local header = Instance.new("TextLabel")
-    header.Size = UDim2.new(1, 0, 0, 16)
+    header.Size = UDim2.new(1, 0, 0, 14)
     header.BackgroundTransparency = 1
     header.Font = Enum.Font.GothamBold
-    header.TextSize = 13
+    header.TextSize = 11
     header.TextXAlignment = Enum.TextXAlignment.Left
     header.Text = title
     header.Parent = notifFrame
@@ -233,11 +179,11 @@ function LucidUI:Notify(options)
 
     local textLbl = Instance.new("TextLabel")
     textLbl.Size = UDim2.new(1, 0, 0, 0)
-    textLbl.Position = UDim2.new(0, 0, 0, 18)
+    textLbl.Position = UDim2.new(0, 0, 0, 15)
     textLbl.AutomaticSize = Enum.AutomaticSize.Y
     textLbl.BackgroundTransparency = 1
     textLbl.Font = Enum.Font.Gotham
-    textLbl.TextSize = 11
+    textLbl.TextSize = 10
     textLbl.TextWrapped = true
     textLbl.TextXAlignment = Enum.TextXAlignment.Left
     textLbl.Text = message
@@ -246,12 +192,7 @@ function LucidUI:Notify(options)
 
     task.delay(duration, function()
         if notifFrame and notifFrame.Parent then
-            local tweenOut = QuickTween(notifFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-                BackgroundTransparency = 1
-            })
-            tweenOut.Completed:Connect(function()
-                notifFrame:Destroy()
-            end)
+            notifFrame:Destroy()
         end
     end)
 end
@@ -259,21 +200,20 @@ end
 function LucidUI:CreateWindow(options)
     options = options or {}
     local windowTitle = options.Title or "LucidUI"
-    local windowSubTitle = options.SubTitle or ""
-    local windowSize = options.Size or UDim2.new(0, 540, 0, 360)
+    local windowSize = options.Size or UDim2.new(0, 500, 0, 330)
     local toggleKey = options.ToggleKey or Enum.KeyCode.RightControl
 
     local parentContainer = GetGuiParent()
 
     local camera = workspace.CurrentCamera
     if camera and camera.ViewportSize then
-        local targetW = math.min(windowSize.X.Offset, camera.ViewportSize.X - 20)
-        local targetH = math.min(windowSize.Y.Offset, camera.ViewportSize.Y - 20)
+        local targetW = math.min(windowSize.X.Offset, camera.ViewportSize.X - 16)
+        local targetH = math.min(windowSize.Y.Offset, camera.ViewportSize.Y - 16)
         windowSize = UDim2.new(0, targetW, 0, targetH)
     end
 
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "LucidUI_" .. windowTitle:gsub("%s+", "")
+    screenGui.Name = "LucidUI_Win"
     screenGui.DisplayOrder = 100
     screenGui.ResetOnSpawn = false
     screenGui.Parent = parentContainer
@@ -285,8 +225,8 @@ function LucidUI:CreateWindow(options)
     mainFrame.ClipsDescendants = true
     mainFrame.Parent = screenGui
     RegisterThemeColor(mainFrame, "BackgroundColor3", "MainBG")
-    CreateUICorner(mainFrame, 12)
-    CreateUIStroke(mainFrame, "Border", 1)
+    CreateUICorner(mainFrame, 8)
+    CreateUIStroke(mainFrame, "Border")
 
     local uiVisible = true
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -298,46 +238,21 @@ function LucidUI:CreateWindow(options)
 
     if options.MobileToggle then
         local mobGui = Instance.new("ScreenGui")
-        mobGui.Name = "LucidUI_MobileToggle"
-        mobGui.DisplayOrder = 9999
+        mobGui.Name = "LucidUI_Mob"
         mobGui.ResetOnSpawn = false
         mobGui.Parent = parentContainer
 
         local mobBtn = Instance.new("TextButton")
-        mobBtn.Size = UDim2.new(0, 36, 0, 36)
-        mobBtn.Position = UDim2.new(0.04, 0, 0.2, 0)
+        mobBtn.Size = UDim2.new(0, 32, 0, 32)
+        mobBtn.Position = UDim2.new(0.02, 0, 0.2, 0)
         mobBtn.Text = "⚡"
         mobBtn.Font = Enum.Font.GothamBold
-        mobBtn.TextSize = 16
+        mobBtn.TextSize = 14
         mobBtn.Parent = mobGui
         RegisterThemeColor(mobBtn, "BackgroundColor3", "SectionBG")
         RegisterThemeColor(mobBtn, "TextColor3", "Accent")
-        CreateUICorner(mobBtn, 18)
-        CreateUIStroke(mobBtn, "Border", 1)
-
-        local mobDragging = false
-        local mobDragStart, mobStartPos
-
-        mobBtn.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                mobDragging = true
-                mobDragStart = input.Position
-                mobStartPos = mobBtn.Position
-            end
-        end)
-
-        UserInputService.InputChanged:Connect(function(input)
-            if mobDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-                local delta = input.Position - mobDragStart
-                mobBtn.Position = UDim2.new(mobStartPos.X.Scale, mobStartPos.X.Offset + delta.X, mobStartPos.Y.Scale, mobStartPos.Y.Offset + delta.Y)
-            end
-        end)
-
-        UserInputService.InputEnded:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                mobDragging = false
-            end
-        end)
+        CreateUICorner(mobBtn, 16)
+        CreateUIStroke(mobBtn, "Border")
 
         mobBtn.MouseButton1Click:Connect(function()
             uiVisible = not uiVisible
@@ -349,7 +264,7 @@ function LucidUI:CreateWindow(options)
     local dragInput, dragStart, startPos
 
     local headerFrame = Instance.new("Frame")
-    headerFrame.Size = UDim2.new(1, 0, 0, 40)
+    headerFrame.Size = UDim2.new(1, 0, 0, 32)
     headerFrame.BackgroundTransparency = 1
     headerFrame.Parent = mainFrame
 
@@ -360,9 +275,7 @@ function LucidUI:CreateWindow(options)
             startPos = mainFrame.Position
 
             input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
+                if input.UserInputState == Enum.UserInputState.End then dragging = false end
             end)
         end
     end)
@@ -376,45 +289,27 @@ function LucidUI:CreateWindow(options)
     UserInputService.InputChanged:Connect(function(input)
         if input == dragInput and dragging then
             local delta = input.Position - dragStart
-            mainFrame.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
+            mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
         end
     end)
 
     local titleLabel = Instance.new("TextLabel")
-    titleLabel.Size = UDim2.new(0, 180, 0, 20)
-    titleLabel.Position = UDim2.new(0, 14, 0, 10)
+    titleLabel.Size = UDim2.new(0, 160, 0, 16)
+    titleLabel.Position = UDim2.new(0, 12, 0, 8)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Font = Enum.Font.GothamBold
-    titleLabel.TextSize = 14
+    titleLabel.TextSize = 12
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Text = windowTitle
     titleLabel.Parent = headerFrame
     RegisterThemeColor(titleLabel, "TextColor3", "Text")
 
-    if windowSubTitle ~= "" then
-        local subTitleLabel = Instance.new("TextLabel")
-        subTitleLabel.Size = UDim2.new(0, 160, 0, 16)
-        subTitleLabel.Position = UDim2.new(0, titleLabel.TextBounds.X + 22, 0, 12)
-        subTitleLabel.BackgroundTransparency = 1
-        subTitleLabel.Font = Enum.Font.GothamMedium
-        subTitleLabel.TextSize = 11
-        subTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        subTitleLabel.Text = windowSubTitle
-        subTitleLabel.Parent = headerFrame
-        RegisterThemeColor(subTitleLabel, "TextColor3", "Accent")
-    end
-
     local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 24, 0, 24)
-    closeBtn.Position = UDim2.new(1, -32, 0, 8)
+    closeBtn.Size = UDim2.new(0, 20, 0, 20)
+    closeBtn.Position = UDim2.new(1, -26, 0, 6)
     closeBtn.BackgroundTransparency = 1
     closeBtn.Font = Enum.Font.GothamBold
-    closeBtn.TextSize = 13
+    closeBtn.TextSize = 11
     closeBtn.Text = "✕"
     closeBtn.Parent = headerFrame
     RegisterThemeColor(closeBtn, "TextColor3", "SubText")
@@ -424,11 +319,11 @@ function LucidUI:CreateWindow(options)
     end)
 
     local sidebarFrame = Instance.new("Frame")
-    sidebarFrame.Size = UDim2.new(0, 140, 1, -40)
-    sidebarFrame.Position = UDim2.new(0, 0, 0, 40)
+    sidebarFrame.Size = UDim2.new(0, 120, 1, -32)
+    sidebarFrame.Position = UDim2.new(0, 0, 0, 32)
     sidebarFrame.Parent = mainFrame
     RegisterThemeColor(sidebarFrame, "BackgroundColor3", "SidebarBG")
-    CreateUIPadding(sidebarFrame, 8, 8, 8, 8)
+    CreateUIPadding(sidebarFrame, 6, 6, 6, 6)
 
     local tabListContainer = Instance.new("ScrollingFrame")
     tabListContainer.Size = UDim2.new(1, 0, 1, 0)
@@ -440,12 +335,12 @@ function LucidUI:CreateWindow(options)
 
     local tabListLayout = Instance.new("UIListLayout")
     tabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    tabListLayout.Padding = UDim.new(0, 4)
+    tabListLayout.Padding = UDim.new(0, 3)
     tabListLayout.Parent = tabListContainer
 
     local contentArea = Instance.new("Frame")
-    contentArea.Size = UDim2.new(1, -140, 1, -40)
-    contentArea.Position = UDim2.new(0, 140, 0, 40)
+    contentArea.Size = UDim2.new(1, -120, 1, -32)
+    contentArea.Position = UDim2.new(0, 120, 0, 32)
     contentArea.BackgroundTransparency = 1
     contentArea.Parent = mainFrame
 
@@ -459,16 +354,24 @@ function LucidUI:CreateWindow(options)
 
     function Window:CreateTab(tabName, tabIcon)
         local tabBtn = Instance.new("TextButton")
-        tabBtn.Size = UDim2.new(1, 0, 0, 32)
+        tabBtn.Size = UDim2.new(1, 0, 0, 28)
         tabBtn.Font = Enum.Font.GothamMedium
-        tabBtn.TextSize = 12
+        tabBtn.TextSize = 11
         tabBtn.TextXAlignment = Enum.TextXAlignment.Left
-        tabBtn.Text = (tabIcon and tabIcon .. "  " or "") .. tabName
+        tabBtn.Text = (tabIcon and tabIcon .. " " or "") .. tabName
         tabBtn.Parent = tabListContainer
         RegisterThemeColor(tabBtn, "BackgroundColor3", "SidebarBG")
         RegisterThemeColor(tabBtn, "TextColor3", "SubText")
-        CreateUICorner(tabBtn, 6)
-        CreateUIPadding(tabBtn, 0, 0, 10, 10)
+        CreateUICorner(tabBtn, 4)
+        CreateUIPadding(tabBtn, 0, 0, 8, 8)
+
+        local activeIndicator = Instance.new("Frame")
+        activeIndicator.Size = UDim2.new(0, 3, 0, 16)
+        activeIndicator.Position = UDim2.new(0, -6, 0.5, -8)
+        activeIndicator.Visible = false
+        activeIndicator.Parent = tabBtn
+        RegisterThemeColor(activeIndicator, "BackgroundColor3", "Accent")
+        CreateUICorner(activeIndicator, 2)
 
         local tabContent = Instance.new("ScrollingFrame")
         tabContent.Size = UDim2.new(1, 0, 1, 0)
@@ -478,38 +381,34 @@ function LucidUI:CreateWindow(options)
         tabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
         tabContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
         tabContent.Parent = contentArea
-        CreateUIPadding(tabContent, 10, 10, 10, 10)
+        CreateUIPadding(tabContent, 8, 8, 8, 8)
 
         local tabLayout = Instance.new("UIListLayout")
         tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        tabLayout.Padding = UDim.new(0, 8)
+        tabLayout.Padding = UDim.new(0, 6)
         tabLayout.Parent = tabContent
 
-        local Tab = {
-            Sections = {},
-            ContentFrame = tabContent,
-            Button = tabBtn
-        }
+        local Tab = {Sections = {}, ContentFrame = tabContent, Button = tabBtn}
 
         local function ActivateTab()
             for _, t in pairs(Window.Tabs) do
                 t.ContentFrame.Visible = false
-                QuickTween(t.Button, TweenInfo.new(0.15), {BackgroundTransparency = 1})
+                QuickTween(t.Button, TweenInfo.new(0.1), {BackgroundTransparency = 1})
                 RegisterThemeColor(t.Button, "TextColor3", "SubText")
+                if t.Indicator then t.Indicator.Visible = false end
             end
             tabContent.Visible = true
-            QuickTween(tabBtn, TweenInfo.new(0.15), {BackgroundTransparency = 0})
+            activeIndicator.Visible = true
+            QuickTween(tabBtn, TweenInfo.new(0.1), {BackgroundTransparency = 0})
             RegisterThemeColor(tabBtn, "BackgroundColor3", "SectionBG")
             RegisterThemeColor(tabBtn, "TextColor3", "Accent")
             Window.ActiveTab = Tab
         end
 
+        Tab.Indicator = activeIndicator
         tabBtn.MouseButton1Click:Connect(ActivateTab)
 
-        if #Window.Tabs == 0 then
-            ActivateTab()
-        end
-
+        if #Window.Tabs == 0 then ActivateTab() end
         table.insert(Window.Tabs, Tab)
 
         function Tab:CreateSection(sectionTitle)
@@ -518,21 +417,21 @@ function LucidUI:CreateWindow(options)
             sectionFrame.AutomaticSize = Enum.AutomaticSize.Y
             sectionFrame.Parent = tabContent
             RegisterThemeColor(sectionFrame, "BackgroundColor3", "SectionBG")
-            CreateUICorner(sectionFrame, 8)
-            CreateUIStroke(sectionFrame, "Border", 1)
-            CreateUIPadding(sectionFrame, 10, 10, 10, 10)
+            CreateUICorner(sectionFrame, 6)
+            CreateUIStroke(sectionFrame, "Border")
+            CreateUIPadding(sectionFrame, 8, 8, 8, 8)
 
             local sectionLayout = Instance.new("UIListLayout")
             sectionLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            sectionLayout.Padding = UDim.new(0, 8)
+            sectionLayout.Padding = UDim.new(0, 6)
             sectionLayout.Parent = sectionFrame
 
             if sectionTitle and sectionTitle ~= "" then
                 local sTitle = Instance.new("TextLabel")
-                sTitle.Size = UDim2.new(1, 0, 0, 16)
+                sTitle.Size = UDim2.new(1, 0, 0, 14)
                 sTitle.BackgroundTransparency = 1
                 sTitle.Font = Enum.Font.GothamBold
-                sTitle.TextSize = 12
+                sTitle.TextSize = 11
                 sTitle.TextXAlignment = Enum.TextXAlignment.Left
                 sTitle.Text = sectionTitle
                 sTitle.Parent = sectionFrame
@@ -547,33 +446,27 @@ function LucidUI:CreateWindow(options)
                 local callback = options.Callback or function() end
 
                 local btnFrame = Instance.new("TextButton")
-                btnFrame.Size = UDim2.new(1, 0, 0, 32)
+                btnFrame.Size = UDim2.new(1, 0, 0, 26)
                 btnFrame.Text = ""
                 btnFrame.AutoButtonColor = false
                 btnFrame.Parent = sectionFrame
                 RegisterThemeColor(btnFrame, "BackgroundColor3", "ElementBG")
-                CreateUICorner(btnFrame, 6)
-                CreateUIPadding(btnFrame, 4, 4, 10, 10)
+                CreateUICorner(btnFrame, 4)
+                CreateUIPadding(btnFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
                 titleLbl.Size = UDim2.new(1, 0, 1, 0)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
-                titleLbl.TextSize = 12
+                titleLbl.TextSize = 11
                 titleLbl.TextXAlignment = Enum.TextXAlignment.Left
                 titleLbl.Text = btnText
                 titleLbl.Parent = btnFrame
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
-                btnFrame.MouseEnter:Connect(function()
-                    RegisterThemeColor(btnFrame, "BackgroundColor3", "ElementHover")
-                end)
-                btnFrame.MouseLeave:Connect(function()
-                    RegisterThemeColor(btnFrame, "BackgroundColor3", "ElementBG")
-                end)
-                btnFrame.MouseButton1Click:Connect(function()
-                    callback()
-                end)
+                btnFrame.MouseEnter:Connect(function() RegisterThemeColor(btnFrame, "BackgroundColor3", "ElementHover") end)
+                btnFrame.MouseLeave:Connect(function() RegisterThemeColor(btnFrame, "BackgroundColor3", "ElementBG") end)
+                btnFrame.MouseButton1Click:Connect(function() callback() end)
 
                 return {
                     SetText = function(_, newText) titleLbl.Text = newText end,
@@ -589,35 +482,35 @@ function LucidUI:CreateWindow(options)
                 local callback = options.Callback or function() end
 
                 local toggleFrame = Instance.new("Frame")
-                toggleFrame.Size = UDim2.new(1, 0, 0, 32)
+                toggleFrame.Size = UDim2.new(1, 0, 0, 26)
                 toggleFrame.Parent = sectionFrame
                 RegisterThemeColor(toggleFrame, "BackgroundColor3", "ElementBG")
-                CreateUICorner(toggleFrame, 6)
-                CreateUIPadding(toggleFrame, 4, 4, 10, 10)
+                CreateUICorner(toggleFrame, 4)
+                CreateUIPadding(toggleFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
-                titleLbl.Size = UDim2.new(1, -45, 1, 0)
+                titleLbl.Size = UDim2.new(1, -35, 1, 0)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
-                titleLbl.TextSize = 12
+                titleLbl.TextSize = 11
                 titleLbl.TextXAlignment = Enum.TextXAlignment.Left
                 titleLbl.Text = toggleName
                 titleLbl.Parent = toggleFrame
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
                 local pillFrame = Instance.new("Frame")
-                pillFrame.Size = UDim2.new(0, 34, 0, 18)
-                pillFrame.Position = UDim2.new(1, -34, 0.5, -9)
+                pillFrame.Size = UDim2.new(0, 28, 0, 14)
+                pillFrame.Position = UDim2.new(1, -28, 0.5, -7)
                 pillFrame.Parent = toggleFrame
                 RegisterThemeColor(pillFrame, "BackgroundColor3", state and "Accent" or "SectionBG")
-                CreateUICorner(pillFrame, 9)
+                CreateUICorner(pillFrame, 7)
 
                 local pillDot = Instance.new("Frame")
-                pillDot.Size = UDim2.new(0, 14, 0, 14)
-                pillDot.Position = state and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
+                pillDot.Size = UDim2.new(0, 10, 0, 10)
+                pillDot.Position = state and UDim2.new(1, -12, 0.5, -5) or UDim2.new(0, 2, 0.5, -5)
                 pillDot.Parent = pillFrame
                 RegisterThemeColor(pillDot, "BackgroundColor3", "Text")
-                CreateUICorner(pillDot, 7)
+                CreateUICorner(pillDot, 5)
 
                 local btnOverlay = Instance.new("TextButton")
                 btnOverlay.Size = UDim2.new(1, 0, 1, 0)
@@ -629,16 +522,13 @@ function LucidUI:CreateWindow(options)
                     state = val
                     if flag then Window.ConfigData[flag] = state end
                     RegisterThemeColor(pillFrame, "BackgroundColor3", state and "Accent" or "SectionBG")
-                    QuickTween(pillDot, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        Position = state and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
+                    QuickTween(pillDot, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Position = state and UDim2.new(1, -12, 0.5, -5) or UDim2.new(0, 2, 0.5, -5)
                     })
                     callback(state)
                 end
 
-                btnOverlay.MouseButton1Click:Connect(function()
-                    UpdateState(not state)
-                end)
-
+                btnOverlay.MouseButton1Click:Connect(function() UpdateState(not state) end)
                 if flag then Window.ConfigData[flag] = state end
 
                 return {
@@ -659,36 +549,36 @@ function LucidUI:CreateWindow(options)
                 local callback = options.Callback or function() end
 
                 local sliderFrame = Instance.new("Frame")
-                sliderFrame.Size = UDim2.new(1, 0, 0, 40)
+                sliderFrame.Size = UDim2.new(1, 0, 0, 32)
                 sliderFrame.Parent = sectionFrame
                 RegisterThemeColor(sliderFrame, "BackgroundColor3", "ElementBG")
-                CreateUICorner(sliderFrame, 6)
-                CreateUIPadding(sliderFrame, 4, 4, 10, 10)
+                CreateUICorner(sliderFrame, 4)
+                CreateUIPadding(sliderFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
-                titleLbl.Size = UDim2.new(0.6, 0, 0, 16)
+                titleLbl.Size = UDim2.new(0.6, 0, 0, 14)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
-                titleLbl.TextSize = 12
+                titleLbl.TextSize = 11
                 titleLbl.TextXAlignment = Enum.TextXAlignment.Left
                 titleLbl.Text = sliderName
                 titleLbl.Parent = sliderFrame
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
                 local valInput = Instance.new("TextBox")
-                valInput.Size = UDim2.new(0.35, 0, 0, 16)
+                valInput.Size = UDim2.new(0.35, 0, 0, 14)
                 valInput.Position = UDim2.new(0.65, 0, 0, 0)
                 valInput.BackgroundTransparency = 1
                 valInput.Font = Enum.Font.GothamMedium
-                valInput.TextSize = 11
+                valInput.TextSize = 10
                 valInput.TextXAlignment = Enum.TextXAlignment.Right
                 valInput.Text = tostring(value) .. suffix
                 valInput.Parent = sliderFrame
                 RegisterThemeColor(valInput, "TextColor3", "Accent")
 
                 local barTrack = Instance.new("Frame")
-                barTrack.Size = UDim2.new(1, 0, 0, 4)
-                barTrack.Position = UDim2.new(0, 0, 0, 22)
+                barTrack.Size = UDim2.new(1, 0, 0, 3)
+                barTrack.Position = UDim2.new(0, 0, 0, 18)
                 barTrack.Parent = sliderFrame
                 RegisterThemeColor(barTrack, "BackgroundColor3", "SectionBG")
                 CreateUICorner(barTrack, 2)
@@ -703,16 +593,12 @@ function LucidUI:CreateWindow(options)
 
                 local function ApplyValue(newVal)
                     newVal = math.clamp(newVal, min, max)
-                    if precision == 0 then
-                        newVal = math.floor(newVal + 0.5)
-                    else
-                        local mult = 10 ^ precision
-                        newVal = math.floor(newVal * mult + 0.5) / mult
-                    end
+                    if precision == 0 then newVal = math.floor(newVal + 0.5)
+                    else local mult = 10 ^ precision; newVal = math.floor(newVal * mult + 0.5) / mult end
                     value = newVal
                     if flag then Window.ConfigData[flag] = value end
                     local pct = math.clamp((value - min) / (max - min), 0, 1)
-                    QuickTween(barFill, TweenInfo.new(0.06), {Size = UDim2.new(pct, 0, 1, 0)})
+                    QuickTween(barFill, TweenInfo.new(0.04), {Size = UDim2.new(pct, 0, 1, 0)})
                     valInput.Text = tostring(value) .. suffix
                     callback(value)
                 end
@@ -723,8 +609,7 @@ function LucidUI:CreateWindow(options)
                     local trackAbsPos = barTrack.AbsolutePosition.X
                     local trackAbsSize = barTrack.AbsoluteSize.X
                     local pct = math.clamp((mousePos - trackAbsPos) / trackAbsSize, 0, 1)
-                    local calculatedVal = min + (max - min) * pct
-                    ApplyValue(calculatedVal)
+                    ApplyValue(min + (max - min) * pct)
                 end
 
                 barTrack.InputBegan:Connect(function(input)
@@ -763,22 +648,20 @@ function LucidUI:CreateWindow(options)
             function Section:AddTextBox(options)
                 options = options or {}
                 local boxName = options.Name or options.Title or "Text Box"
-                local placeholder = options.Placeholder or "Type here..."
+                local placeholder = options.Placeholder or "Type..."
                 local defaultText = options.Default or ""
-                local customPadding = options.Padding or {Left = 8, Right = 8, Top = 4, Bottom = 4}
-                local numericOnly = options.NumericOnly or false
                 local flag = options.Flag
                 local callback = options.Callback or function() end
 
                 local containerFrame = Instance.new("Frame")
-                containerFrame.Size = UDim2.new(1, 0, 0, 44)
+                containerFrame.Size = UDim2.new(1, 0, 0, 34)
                 containerFrame.Parent = sectionFrame
                 RegisterThemeColor(containerFrame, "BackgroundColor3", "ElementBG")
-                CreateUICorner(containerFrame, 6)
-                CreateUIPadding(containerFrame, 4, 4, 10, 10)
+                CreateUICorner(containerFrame, 4)
+                CreateUIPadding(containerFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
-                titleLbl.Size = UDim2.new(1, 0, 0, 14)
+                titleLbl.Size = UDim2.new(0.45, 0, 1, 0)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
                 titleLbl.TextSize = 11
@@ -788,37 +671,25 @@ function LucidUI:CreateWindow(options)
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
                 local boxHolder = Instance.new("Frame")
-                boxHolder.Size = UDim2.new(1, 0, 0, 22)
-                boxHolder.Position = UDim2.new(0, 0, 0, 16)
+                boxHolder.Size = UDim2.new(0.5, 0, 0, 20)
+                boxHolder.Position = UDim2.new(0.5, 0, 0.5, -10)
                 boxHolder.Parent = containerFrame
                 RegisterThemeColor(boxHolder, "BackgroundColor3", "SectionBG")
                 CreateUICorner(boxHolder, 4)
-                CreateUIStroke(boxHolder, "Border", 1)
-
-                local pLeft = type(customPadding) == "table" and customPadding.Left or customPadding
-                local pRight = type(customPadding) == "table" and customPadding.Right or customPadding
-                local pTop = type(customPadding) == "table" and customPadding.Top or customPadding
-                local pBottom = type(customPadding) == "table" and customPadding.Bottom or customPadding
-                CreateUIPadding(boxHolder, pTop or 4, pBottom or 4, pLeft or 8, pRight or 8)
+                CreateUIStroke(boxHolder, "Border")
+                CreateUIPadding(boxHolder, 2, 2, 6, 6)
 
                 local textBox = Instance.new("TextBox")
                 textBox.Size = UDim2.new(1, 0, 1, 0)
                 textBox.BackgroundTransparency = 1
                 textBox.Font = Enum.Font.Gotham
-                textBox.TextSize = 11
+                textBox.TextSize = 10
                 textBox.TextXAlignment = Enum.TextXAlignment.Left
                 textBox.Text = defaultText
                 textBox.PlaceholderText = placeholder
-                textBox.ClearTextOnFocus = false
                 textBox.Parent = boxHolder
                 RegisterThemeColor(textBox, "TextColor3", "Text")
                 RegisterThemeColor(textBox, "PlaceholderColor3", "SubText")
-
-                textBox.Changed:Connect(function(prop)
-                    if prop == "Text" and numericOnly then
-                        textBox.Text = textBox.Text:gsub("[^%d%.%-]", "")
-                    end
-                end)
 
                 textBox.FocusLost:Connect(function(enterPressed)
                     if flag then Window.ConfigData[flag] = textBox.Text end
@@ -841,118 +712,85 @@ function LucidUI:CreateWindow(options)
                 options = options or {}
                 local dropName = options.Name or options.Title or "Dropdown"
                 local items = options.Options or {}
-                local multiSelect = options.MultiSelect or false
-                local defaultSelected = options.Default or (multiSelect and {} or items[1])
+                local defaultSelected = options.Default or items[1]
                 local flag = options.Flag
                 local callback = options.Callback or function() end
 
-                local selected = multiSelect and (type(defaultSelected) == "table" and defaultSelected or {}) or defaultSelected
+                local selected = defaultSelected
 
                 local dropFrame = Instance.new("Frame")
-                dropFrame.Size = UDim2.new(1, 0, 0, 34)
+                dropFrame.Size = UDim2.new(1, 0, 0, 26)
                 dropFrame.ClipsDescendants = true
                 dropFrame.Parent = sectionFrame
                 RegisterThemeColor(dropFrame, "BackgroundColor3", "ElementBG")
-                CreateUICorner(dropFrame, 6)
-                CreateUIPadding(dropFrame, 4, 4, 10, 10)
+                CreateUICorner(dropFrame, 4)
+                CreateUIPadding(dropFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
-                titleLbl.Size = UDim2.new(0.5, 0, 0, 16)
+                titleLbl.Size = UDim2.new(0.5, 0, 0, 14)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
-                titleLbl.TextSize = 12
+                titleLbl.TextSize = 11
                 titleLbl.TextXAlignment = Enum.TextXAlignment.Left
                 titleLbl.Text = dropName
                 titleLbl.Parent = dropFrame
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
                 local displayValLbl = Instance.new("TextLabel")
-                displayValLbl.Size = UDim2.new(0.48, -16, 0, 16)
+                displayValLbl.Size = UDim2.new(0.45, -12, 0, 14)
                 displayValLbl.Position = UDim2.new(0.5, 0, 0, 0)
                 displayValLbl.BackgroundTransparency = 1
                 displayValLbl.Font = Enum.Font.Gotham
-                displayValLbl.TextSize = 11
+                displayValLbl.TextSize = 10
                 displayValLbl.TextXAlignment = Enum.TextXAlignment.Right
-                displayValLbl.TextTruncate = Enum.TextTruncate.AtEnd
+                displayValLbl.Text = tostring(selected or "")
                 displayValLbl.Parent = dropFrame
                 RegisterThemeColor(displayValLbl, "TextColor3", "Accent")
 
-                local arrowLbl = Instance.new("TextLabel")
-                arrowLbl.Size = UDim2.new(0, 14, 0, 16)
-                arrowLbl.Position = UDim2.new(1, -14, 0, 0)
-                arrowLbl.BackgroundTransparency = 1
-                arrowLbl.Font = Enum.Font.GothamBold
-                arrowLbl.TextSize = 11
-                arrowLbl.Text = "▾"
-                arrowLbl.Parent = dropFrame
-                RegisterThemeColor(arrowLbl, "TextColor3", "SubText")
-
                 local itemContainer = Instance.new("ScrollingFrame")
-                itemContainer.Size = UDim2.new(1, 0, 0, 100)
-                itemContainer.Position = UDim2.new(0, 0, 0, 24)
+                itemContainer.Size = UDim2.new(1, 0, 0, 80)
+                itemContainer.Position = UDim2.new(0, 0, 0, 20)
                 itemContainer.BackgroundTransparency = 1
-                itemContainer.ScrollBarThickness = 2
+                itemContainer.ScrollBarThickness = 0
                 itemContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
                 itemContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
                 itemContainer.Parent = dropFrame
 
                 local itemLayout = Instance.new("UIListLayout")
                 itemLayout.SortOrder = Enum.SortOrder.LayoutOrder
-                itemLayout.Padding = UDim.new(0, 3)
+                itemLayout.Padding = UDim.new(0, 2)
                 itemLayout.Parent = itemContainer
 
                 local isOpen = false
 
-                local function FormatDisplay()
-                    if multiSelect then
-                        local selectedList = {}
-                        for opt, val in pairs(selected) do
-                            if val then table.insert(selectedList, opt) end
-                        end
-                        return #selectedList > 0 and table.concat(selectedList, ", ") or "None"
-                    else
-                        return tostring(selected or "Select...")
-                    end
-                end
-
-                displayValLbl.Text = FormatDisplay()
-
-                local optionButtons = {}
-
                 local function RenderOptions()
-                    for _, btn in pairs(optionButtons) do btn:Destroy() end
-                    optionButtons = {}
+                    for _, child in pairs(itemContainer:GetChildren()) do
+                        if child:IsA("TextButton") then child:Destroy() end
+                    end
 
-                    for idx, optName in ipairs(items) do
+                    for _, optName in ipairs(items) do
                         local optBtn = Instance.new("TextButton")
-                        optBtn.Size = UDim2.new(1, -4, 0, 22)
+                        optBtn.Size = UDim2.new(1, 0, 0, 18)
                         optBtn.Font = Enum.Font.Gotham
-                        optBtn.TextSize = 11
+                        optBtn.TextSize = 10
                         optBtn.TextXAlignment = Enum.TextXAlignment.Left
                         optBtn.Text = "  " .. tostring(optName)
                         optBtn.Parent = itemContainer
-                        CreateUICorner(optBtn, 4)
+                        CreateUICorner(optBtn, 3)
 
-                        local isSel = multiSelect and selected[optName] or (selected == optName)
+                        local isSel = (selected == optName)
                         RegisterThemeColor(optBtn, "BackgroundColor3", isSel and "Accent" or "SectionBG")
                         RegisterThemeColor(optBtn, "TextColor3", "Text")
 
                         optBtn.MouseButton1Click:Connect(function()
-                            if multiSelect then
-                                selected[optName] = not selected[optName]
-                            else
-                                selected = optName
-                                isOpen = false
-                                QuickTween(dropFrame, TweenInfo.new(0.15), {Size = UDim2.new(1, 0, 0, 34)})
-                                arrowLbl.Text = "▾"
-                            end
-                            displayValLbl.Text = FormatDisplay()
+                            selected = optName
+                            isOpen = false
+                            QuickTween(dropFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 26)})
+                            displayValLbl.Text = tostring(selected)
                             if flag then Window.ConfigData[flag] = selected end
                             RenderOptions()
                             callback(selected)
                         end)
-
-                        table.insert(optionButtons, optBtn)
                     end
                 end
 
@@ -966,19 +804,12 @@ function LucidUI:CreateWindow(options)
 
                 toggleBtn.MouseButton1Click:Connect(function()
                     isOpen = not isOpen
-                    arrowLbl.Text = isOpen and "▴" or "▾"
-                    QuickTween(dropFrame, TweenInfo.new(0.15), {Size = UDim2.new(1, 0, 0, isOpen and 130 or 34)})
+                    QuickTween(dropFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, isOpen and 100 or 26)})
                 end)
 
                 if flag then Window.ConfigData[flag] = selected end
 
                 return {
-                    SetOptions = function(_, newOptions, newDefault)
-                        items = newOptions or {}
-                        selected = newDefault or (multiSelect and {} or items[1])
-                        displayValLbl.Text = FormatDisplay()
-                        RenderOptions()
-                    end,
                     GetValue = function() return selected end
                 }
             end
@@ -991,39 +822,35 @@ function LucidUI:CreateWindow(options)
                 local callback = options.Callback or function() end
 
                 local kbFrame = Instance.new("Frame")
-                kbFrame.Size = UDim2.new(1, 0, 0, 32)
+                kbFrame.Size = UDim2.new(1, 0, 0, 26)
                 kbFrame.Parent = sectionFrame
                 RegisterThemeColor(kbFrame, "BackgroundColor3", "ElementBG")
-                CreateUICorner(kbFrame, 6)
-                CreateUIPadding(kbFrame, 4, 4, 10, 10)
+                CreateUICorner(kbFrame, 4)
+                CreateUIPadding(kbFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
                 titleLbl.Size = UDim2.new(0.6, 0, 1, 0)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
-                titleLbl.TextSize = 12
+                titleLbl.TextSize = 11
                 titleLbl.TextXAlignment = Enum.TextXAlignment.Left
                 titleLbl.Text = keyName
                 titleLbl.Parent = kbFrame
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
                 local bindBtn = Instance.new("TextButton")
-                bindBtn.Size = UDim2.new(0.3, 0, 0, 18)
-                bindBtn.Position = UDim2.new(0.7, 0, 0.5, -9)
+                bindBtn.Size = UDim2.new(0.25, 0, 0, 16)
+                bindBtn.Position = UDim2.new(0.75, 0, 0.5, -8)
                 bindBtn.Font = Enum.Font.GothamBold
-                bindBtn.TextSize = 10
+                bindBtn.TextSize = 9
                 bindBtn.Text = currentKey.Name
                 bindBtn.Parent = kbFrame
                 RegisterThemeColor(bindBtn, "BackgroundColor3", "SectionBG")
                 RegisterThemeColor(bindBtn, "TextColor3", "Accent")
-                CreateUICorner(bindBtn, 4)
+                CreateUICorner(bindBtn, 3)
 
                 local isBinding = false
-
-                bindBtn.MouseButton1Click:Connect(function()
-                    isBinding = true
-                    bindBtn.Text = "..."
-                end)
+                bindBtn.MouseButton1Click:Connect(function() isBinding = true; bindBtn.Text = "..." end)
 
                 UserInputService.InputBegan:Connect(function(input, gameProcessed)
                     if isBinding and not gameProcessed then
@@ -1043,11 +870,7 @@ function LucidUI:CreateWindow(options)
                 if flag then Window.ConfigData[flag] = currentKey.Name end
 
                 return {
-                    SetValue = function(_, key)
-                        currentKey = key
-                        bindBtn.Text = currentKey.Name
-                        if flag then Window.ConfigData[flag] = currentKey.Name end
-                    end,
+                    SetValue = function(_, key) currentKey = key; bindBtn.Text = currentKey.Name end,
                     GetValue = function() return currentKey end
                 }
             end
@@ -1056,32 +879,6 @@ function LucidUI:CreateWindow(options)
         end
 
         return Tab
-    end
-
-    function Window:SaveConfig(configName)
-        configName = configName or "default"
-        if not isfolder or not writefile then return end
-        if not isfolder(LucidUI.ConfigFolder) then makefolder(LucidUI.ConfigFolder) end
-
-        local filePath = LucidUI.ConfigFolder .. "/" .. configName .. ".json"
-        local success, jsonStr = pcall(function() return HttpService:JSONEncode(Window.ConfigData) end)
-        if success then writefile(filePath, jsonStr) end
-    end
-
-    function Window:LoadConfig(configName)
-        configName = configName or "default"
-        if not isfolder or not readfile then return end
-
-        local filePath = LucidUI.ConfigFolder .. "/" .. configName .. ".json"
-        if isfile and isfile(filePath) then
-            local success, jsonStr = pcall(function() return readfile(filePath) end)
-            if success then
-                local decodeSuccess, decodedData = pcall(function() return HttpService:JSONDecode(jsonStr) end)
-                if decodeSuccess and type(decodedData) == "table" then
-                    Window.ConfigData = decodedData
-                end
-            end
-        end
     end
 
     table.insert(LucidUI.ActiveWindows, Window)
