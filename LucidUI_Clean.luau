@@ -1,5 +1,5 @@
 local LucidUI = {
-    Version = "3.1.0",
+    Version = "3.2.0",
     Themes = {},
     CurrentTheme = "Dark",
     ActiveWindows = {},
@@ -431,27 +431,63 @@ function LucidUI:CreateWindow(options)
             local sectionFrame = Instance.new("Frame")
             sectionFrame.Size = UDim2.new(1, 0, 0, 0)
             sectionFrame.AutomaticSize = Enum.AutomaticSize.Y
+            sectionFrame.ClipsDescendants = true
             sectionFrame.Parent = tabContent
             RegisterThemeColor(sectionFrame, "BackgroundColor3", "SectionBG")
             CreateUICorner(sectionFrame, 6)
             CreateUIStroke(sectionFrame, "Border")
-            CreateUIPadding(sectionFrame, 8, 8, 8, 8)
+            CreateUIPadding(sectionFrame, 6, 6, 8, 8)
 
             local sectionLayout = Instance.new("UIListLayout")
             sectionLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            sectionLayout.Padding = UDim.new(0, 6)
+            sectionLayout.Padding = UDim.new(0, 4)
             sectionLayout.Parent = sectionFrame
 
+            local contentFrame = Instance.new("Frame")
+            contentFrame.Size = UDim2.new(1, 0, 0, 0)
+            contentFrame.AutomaticSize = Enum.AutomaticSize.Y
+            contentFrame.BackgroundTransparency = 1
+            contentFrame.Parent = sectionFrame
+
+            local contentLayout = Instance.new("UIListLayout")
+            contentLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            contentLayout.Padding = UDim.new(0, 4)
+            contentLayout.Parent = contentFrame
+
             if sectionTitle and sectionTitle ~= "" then
+                local headerBtn = Instance.new("TextButton")
+                headerBtn.Size = UDim2.new(1, 0, 0, 18)
+                headerBtn.BackgroundTransparency = 1
+                headerBtn.Text = ""
+                headerBtn.Parent = sectionFrame
+                headerBtn.LayoutOrder = -1
+
                 local sTitle = Instance.new("TextLabel")
-                sTitle.Size = UDim2.new(1, 0, 0, 14)
+                sTitle.Size = UDim2.new(1, -20, 1, 0)
                 sTitle.BackgroundTransparency = 1
                 sTitle.Font = Enum.Font.GothamBold
                 sTitle.TextSize = 11
                 sTitle.TextXAlignment = Enum.TextXAlignment.Left
                 sTitle.Text = sectionTitle
-                sTitle.Parent = sectionFrame
+                sTitle.Parent = headerBtn
                 RegisterThemeColor(sTitle, "TextColor3", "Text")
+
+                local arrowLbl = Instance.new("TextLabel")
+                arrowLbl.Size = UDim2.new(0, 16, 1, 0)
+                arrowLbl.Position = UDim2.new(1, -16, 0, 0)
+                arrowLbl.BackgroundTransparency = 1
+                arrowLbl.Font = Enum.Font.GothamBold
+                arrowLbl.TextSize = 10
+                arrowLbl.Text = "▾"
+                arrowLbl.Parent = headerBtn
+                RegisterThemeColor(arrowLbl, "TextColor3", "SubText")
+
+                local isCollapsed = false
+                headerBtn.MouseButton1Click:Connect(function()
+                    isCollapsed = not isCollapsed
+                    arrowLbl.Text = isCollapsed and "▸" or "▾"
+                    contentFrame.Visible = not isCollapsed
+                end)
             end
 
             local Section = {}
@@ -465,7 +501,7 @@ function LucidUI:CreateWindow(options)
                 btnFrame.Size = UDim2.new(1, 0, 0, 26)
                 btnFrame.Text = ""
                 btnFrame.AutoButtonColor = false
-                btnFrame.Parent = sectionFrame
+                btnFrame.Parent = contentFrame
                 RegisterThemeColor(btnFrame, "BackgroundColor3", "ElementBG")
                 CreateUICorner(btnFrame, 4)
                 CreateUIPadding(btnFrame, 3, 3, 8, 8)
@@ -499,7 +535,7 @@ function LucidUI:CreateWindow(options)
 
                 local toggleFrame = Instance.new("Frame")
                 toggleFrame.Size = UDim2.new(1, 0, 0, 26)
-                toggleFrame.Parent = sectionFrame
+                toggleFrame.Parent = contentFrame
                 RegisterThemeColor(toggleFrame, "BackgroundColor3", "ElementBG")
                 CreateUICorner(toggleFrame, 4)
                 CreateUIPadding(toggleFrame, 3, 3, 8, 8)
@@ -566,7 +602,7 @@ function LucidUI:CreateWindow(options)
 
                 local sliderFrame = Instance.new("Frame")
                 sliderFrame.Size = UDim2.new(1, 0, 0, 32)
-                sliderFrame.Parent = sectionFrame
+                sliderFrame.Parent = contentFrame
                 RegisterThemeColor(sliderFrame, "BackgroundColor3", "ElementBG")
                 CreateUICorner(sliderFrame, 4)
                 CreateUIPadding(sliderFrame, 3, 3, 8, 8)
@@ -671,7 +707,7 @@ function LucidUI:CreateWindow(options)
 
                 local containerFrame = Instance.new("Frame")
                 containerFrame.Size = UDim2.new(1, 0, 0, 34)
-                containerFrame.Parent = sectionFrame
+                containerFrame.Parent = contentFrame
                 RegisterThemeColor(containerFrame, "BackgroundColor3", "ElementBG")
                 CreateUICorner(containerFrame, 4)
                 CreateUIPadding(containerFrame, 3, 3, 8, 8)
@@ -737,7 +773,7 @@ function LucidUI:CreateWindow(options)
                 local dropFrame = Instance.new("Frame")
                 dropFrame.Size = UDim2.new(1, 0, 0, 26)
                 dropFrame.ClipsDescendants = true
-                dropFrame.Parent = sectionFrame
+                dropFrame.Parent = contentFrame
                 RegisterThemeColor(dropFrame, "BackgroundColor3", "ElementBG")
                 CreateUICorner(dropFrame, 4)
                 CreateUIPadding(dropFrame, 3, 3, 8, 8)
@@ -849,7 +885,7 @@ function LucidUI:CreateWindow(options)
 
                 local kbFrame = Instance.new("Frame")
                 kbFrame.Size = UDim2.new(1, 0, 0, 26)
-                kbFrame.Parent = sectionFrame
+                kbFrame.Parent = contentFrame
                 RegisterThemeColor(kbFrame, "BackgroundColor3", "ElementBG")
                 CreateUICorner(kbFrame, 4)
                 CreateUIPadding(kbFrame, 3, 3, 8, 8)
