@@ -1,4 +1,4 @@
-local LucidUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/LucidUI_Clean.luau"))()
+local LucidUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/LucidUI_Clean.luau?v=" .. tick()))()
 
 local Window = LucidUI:CreateWindow({
     Title = "LucidUI Minimal",
@@ -61,6 +61,6 @@ SettingsSection:AddKeybind({
 SettingsSection:AddButton({
     Name = "Copy Script Link",
     Callback = function()
-        LucidUI:SetClipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/clean.luau"))()')
+        LucidUI:SetClipboard('loadstring(game:HttpGet("https://raw.githubusercontent.com/errorobsidian-ux/lucid-ui/main/clean.luau?v=" .. tick()))()')
     end
 })
