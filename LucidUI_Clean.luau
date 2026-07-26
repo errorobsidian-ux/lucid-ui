@@ -1,5 +1,5 @@
 local LucidUI = {
-    Version = "3.0.0",
+    Version = "3.1.0",
     Themes = {},
     CurrentTheme = "Dark",
     ActiveWindows = {},
@@ -313,6 +313,22 @@ function LucidUI:CreateWindow(options)
     closeBtn.Text = "✕"
     closeBtn.Parent = headerFrame
     RegisterThemeColor(closeBtn, "TextColor3", "SubText")
+    CreateUICorner(closeBtn, 10)
+
+    closeBtn.MouseEnter:Connect(function()
+        QuickTween(closeBtn, TweenInfo.new(0.12), {
+            BackgroundTransparency = 0,
+            BackgroundColor3 = Color3.fromRGB(239, 68, 68),
+            TextColor3 = Color3.fromRGB(255, 255, 255)
+        })
+    end)
+
+    closeBtn.MouseLeave:Connect(function()
+        QuickTween(closeBtn, TweenInfo.new(0.12), {
+            BackgroundTransparency = 1,
+            TextColor3 = LucidUI.Themes[LucidUI.CurrentTheme].SubText
+        })
+    end)
 
     closeBtn.MouseButton1Click:Connect(function()
         screenGui:Destroy()
@@ -727,7 +743,7 @@ function LucidUI:CreateWindow(options)
                 CreateUIPadding(dropFrame, 3, 3, 8, 8)
 
                 local titleLbl = Instance.new("TextLabel")
-                titleLbl.Size = UDim2.new(0.5, 0, 0, 14)
+                titleLbl.Size = UDim2.new(0.5, 0, 0, 20)
                 titleLbl.BackgroundTransparency = 1
                 titleLbl.Font = Enum.Font.GothamMedium
                 titleLbl.TextSize = 11
@@ -737,7 +753,7 @@ function LucidUI:CreateWindow(options)
                 RegisterThemeColor(titleLbl, "TextColor3", "Text")
 
                 local displayValLbl = Instance.new("TextLabel")
-                displayValLbl.Size = UDim2.new(0.45, -12, 0, 14)
+                displayValLbl.Size = UDim2.new(0.45, -12, 0, 20)
                 displayValLbl.Position = UDim2.new(0.5, 0, 0, 0)
                 displayValLbl.BackgroundTransparency = 1
                 displayValLbl.Font = Enum.Font.Gotham
@@ -749,11 +765,12 @@ function LucidUI:CreateWindow(options)
 
                 local itemContainer = Instance.new("ScrollingFrame")
                 itemContainer.Size = UDim2.new(1, 0, 0, 80)
-                itemContainer.Position = UDim2.new(0, 0, 0, 20)
+                itemContainer.Position = UDim2.new(0, 0, 0, 26)
                 itemContainer.BackgroundTransparency = 1
                 itemContainer.ScrollBarThickness = 0
                 itemContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
                 itemContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
+                itemContainer.Visible = false
                 itemContainer.Parent = dropFrame
 
                 local itemLayout = Instance.new("UIListLayout")
@@ -785,6 +802,7 @@ function LucidUI:CreateWindow(options)
                         optBtn.MouseButton1Click:Connect(function()
                             selected = optName
                             isOpen = false
+                            itemContainer.Visible = false
                             QuickTween(dropFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 26)})
                             displayValLbl.Text = tostring(selected)
                             if flag then Window.ConfigData[flag] = selected end
@@ -804,7 +822,15 @@ function LucidUI:CreateWindow(options)
 
                 toggleBtn.MouseButton1Click:Connect(function()
                     isOpen = not isOpen
-                    QuickTween(dropFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, isOpen and 100 or 26)})
+                    if isOpen then
+                        itemContainer.Visible = true
+                        QuickTween(dropFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 106)})
+                    else
+                        local tw = QuickTween(dropFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 26)})
+                        tw.Completed:Connect(function()
+                            if not isOpen then itemContainer.Visible = false end
+                        end)
+                    end
                 end)
 
                 if flag then Window.ConfigData[flag] = selected end
